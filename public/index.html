@@ -9,6 +9,21 @@
 </head>
 
 <body>
+<style>
+  td{
+    border: 1px solid black;
+    padding: 3px;
+    position: relative;
+  }
+
+  .lespan{
+    background-color: red;
+    height: 3px;
+    position: absolute;
+  }
+</style>
+
+
   <p>Hello world!</p>
   <div>
     Nombre de tweet reçus : <span id="count_container"></span>
@@ -17,14 +32,16 @@
   <div>
     Nationalités :
     <table>
+      <thead>
+        <tr>
+          <td>Nationalité</td>
+          <td>Nombre de tweet</td>
+          <td>Pourcentage de tweet en fonction du nombre de tweet total depuis le chargement de la page</td>
+        </tr>
+      </thead>
       <tbody id="table_nat">
-
       </tbody>
     </table>
-  </div>
-  <br>
-  <div>
-    Longueur du tweet : <span id="tweet"></span>
   </div>
 
 
@@ -38,9 +55,63 @@
     let count_french = 0;
 
     let tab_lang = [
-      {nom: 'Chinois',code: 'zh',quantité: 0},
       {nom: 'Allemand',code: 'de',quantité: 0},
       {nom: 'Anglais',code: 'en',quantité: 0},
+      {nom: 'Amharique',code: 'am',quantité: 0},
+      {nom: 'Arabe',code: 'ar',quantité: 0},
+      {nom: 'Arménien',code: 'hy',quantité: 0},
+      {nom: 'Bengali',code: 'bn',quantité: 0},
+      {nom: 'Bulgare',code: 'bg',quantité: 0},
+      {nom: 'Birmane',code: 'my',quantité: 0},
+      {nom: 'Tchèque',code: 'cs',quantité: 0},
+      {nom: 'Danois',code: 'da',quantité: 0},
+      {nom: 'Néerlandais',code: 'nl',quantité: 0},
+      {nom: 'Estonien',code: 'et',quantité: 0},
+      {nom: 'Finlandais',code: 'fi',quantité: 0},
+      {nom: 'Géorgien',code: 'ka',quantité: 0},
+      {nom: 'Grec',code: 'el',quantité: 0},
+      {nom: 'Gujarati',code: 'gu',quantité: 0},
+      {nom: 'Hebreu',code: 'iw',quantité: 0},
+      {nom: 'Indien',code: 'hi',quantité: 0},
+      {nom: 'Hongrois',code: 'hu',quantité: 0},
+      {nom: 'Islandais',code: 'is',quantité: 0},
+      {nom: 'Indonésien',code: 'in',quantité: 0},
+      {nom: 'Kannada',code: 'kn',quantité: 0},
+      {nom: 'Khmer',code: 'km',quantité: 0},
+      {nom: 'Coréen',code: 'ko',quantité: 0},
+      {nom: 'Lao',code: 'lo',quantité: 0},
+      {nom: 'Letton',code: 'lv',quantité: 0},
+      {nom: 'Lithuanien',code: 'lt',quantité: 0},
+      {nom: 'Malayalam',code: 'ml',quantité: 0},
+      {nom: 'Maldivien',code: 'dv',quantité: 0},
+      {nom: 'Marathi',code: 'mr',quantité: 0},
+      {nom: 'Népalien',code: 'ne',quantité: 0},
+      {nom: 'Norvégien',code: 'no',quantité: 0},
+      {nom: 'Oriya',code: 'or',quantité: 0},
+      {nom: 'Panjabi',code: 'pa',quantité: 0},
+      {nom: 'Pachto',code: 'ps',quantité: 0},
+      {nom: 'Perses',code: 'fa',quantité: 0},
+      {nom: 'Polonais',code: 'pl',quantité: 0},
+      {nom: 'Roumain',code: 'ro',quantité: 0},
+      {nom: 'Serbe',code: 'sr',quantité: 0},
+      {nom: 'Sindhi',code: 'sd',quantité: 0},
+      {nom: 'Cinghalais',code: 'si',quantité: 0},
+      {nom: 'Slovaquien',code: 'sk',quantité: 0},
+      {nom: 'Slovénien',code: 'sl',quantité: 0},
+      {nom: 'Kurde',code: 'sd',quantité: 0},
+      {nom: 'Suédois',code: 'sv',quantité: 0},
+      {nom: 'Tagalog',code: 'tl',quantité: 0},
+      {nom: 'Tamil',code: 'ta',quantité: 0},
+      {nom: 'Telugu',code: 'te',quantité: 0},
+      {nom: 'Thai',code: 'th',quantité: 0},
+      {nom: 'Tibétin',code: 'bo',quantité: 0},
+      {nom: 'Turque',code: 'tr',quantité: 0},
+      {nom: 'Ukrainien',code: 'uk',quantité: 0},
+      {nom: 'Urdu',code: 'ur',quantité: 0},
+      {nom: 'Uyghur',code: 'ug',quantité: 0},
+      {nom: 'Vietnamien',code: 'vi',quantité: 0},
+      {nom: 'Gallois',code: 'cy',quantité: 0},
+      {nom: 'Chinois',code: 'zh',quantité: 0},
       {nom: 'Français',code: 'fr',quantité: 0},
       {nom: 'Haitien ',code: 'ht',quantité: 0},
       {nom: 'Italien',code: 'it',quantité: 0},
@@ -56,9 +127,16 @@
       let nat = document.createElement('td');
       nat.innerHTML = element.nom;
       let nb = document.createElement('td');
-      nb.setAttribute('id',element.code);
+      let pct = document.createElement('td');
+      let p = document.createElement('p');
+      let span = document.createElement('span');
+      span.classList.add('lespan');
+      line.setAttribute('id',element.code);
+      pct.appendChild(p);
+      pct.appendChild(span);
       line.appendChild(nat);
       line.appendChild(nb);
+      line.appendChild(pct);
       table_nat.insertAdjacentElement('beforeend', line);
     });
   
@@ -79,14 +157,37 @@
         return array.code === tweetdata.lang;
       }
 
-      tab_lang.find(estLangue).quantité ++;
+      function estIndefini(array) {
+        return array.code === 'und';
+      }
 
-      tweet.innerHTML = tweetdata.text;
+      console.log(tab_lang.find(estLangue));
+
+      if(tab_lang.find(estLangue) != undefined)
+        tab_lang.find(estLangue).quantité ++;
+      else
+        tab_lang.find(estIndefini).quantité ++;
+
       count_container.innerHTML = count;
 
-      let langue = document.getElementById(tab_lang.find(estLangue).code);
+      let langue = document.getElementById(tab_lang.find(estLangue).code).children[1];
+      console.log(langue);
+
       langue.innerHTML = tab_lang.find(estLangue).quantité;
-      console.log(tab_lang);
+
+      tab_lang.forEach(element => {
+        let td = document.getElementById(element.code).children[2];
+        let percent = element.quantité * 100 / count;
+        percent = percent*100;          // 556.845
+        percent = Math.round(percent); // 556
+        percent = percent/100;  
+
+        if(percent != 0)
+          td.children[0].innerHTML = percent + '%';
+
+        let lespan = td.querySelector('.lespan');
+        lespan.style.width = percent + '%';
+      });
       
       socket.send("message received!");
     });
