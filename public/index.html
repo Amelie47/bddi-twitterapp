@@ -6,27 +6,91 @@
   <title>TwT Streamer</title>
   <meta name="description" content="">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <script>
-    // Client to server
-    
-    console.log("It works!");
-    const socket = new WebSocket(`ws://${window.location.hostname}:${window.location.port}`);
-
-    socket.addEventListener('open', event => {
-      console.log("connected", event);
-      socket.send("hop");
-    });
-
-    socket.addEventListener('message', event => {
-      console.log("new message", event.data);
-
-      socket.send("message received!");
-    });
-  </script>
 </head>
 
 <body>
   <p>Hello world!</p>
+  <div>
+    Nombre de tweet reçus : <span id="count_container"></span>
+  </div>
+  <br>
+  <div>
+    Nationalités :
+    <table>
+      <tbody id="table_nat">
+
+      </tbody>
+    </table>
+  </div>
+  <br>
+  <div>
+    Longueur du tweet : <span id="tweet"></span>
+  </div>
+
+
+  <script>
+    // Client to server
+  
+    let tweet = document.getElementById('tweet');
+    let count_container = document.getElementById('count_container');
+
+    let count = 0;
+    let count_french = 0;
+
+    let tab_lang = [
+      {nom: 'Chinois',code: 'zh',quantité: 0},
+      {nom: 'Allemand',code: 'de',quantité: 0},
+      {nom: 'Anglais',code: 'en',quantité: 0},
+      {nom: 'Français',code: 'fr',quantité: 0},
+      {nom: 'Haitien ',code: 'ht',quantité: 0},
+      {nom: 'Italien',code: 'it',quantité: 0},
+      {nom: 'Japonais',code: 'ja',quantité: 0},
+      {nom: 'Portugais',code: 'pt',quantité: 0},
+      {nom: 'Russe',code: 'ru',quantité: 0},
+      {nom: 'Espagnols ',code: 'es',quantité: 0},
+      {nom: 'Indéfini ',code: 'und',quantité: 0},
+    ];
+
+    tab_lang.forEach(element => {
+      let line = document.createElement('tr');
+      let nat = document.createElement('td');
+      nat.innerHTML = element.nom;
+      let nb = document.createElement('td');
+      nb.setAttribute('id',element.code);
+      line.appendChild(nat);
+      line.appendChild(nb);
+      table_nat.insertAdjacentElement('beforeend', line);
+    });
+  
+    console.log("It works!");
+    const socket = new WebSocket(`ws://${window.location.hostname}:${window.location.port}`);
+  
+    socket.addEventListener('open', event => {
+      console.log("connected", event);
+      socket.send("hop");
+    });
+  
+    socket.addEventListener('message', event => {
+      // console.log("new message", event.data);
+      count ++;
+      let tweetdata = JSON.parse(event.data);
+
+      function estLangue(array) {
+        return array.code === tweetdata.lang;
+      }
+
+      tab_lang.find(estLangue).quantité ++;
+
+      tweet.innerHTML = tweetdata.text;
+      count_container.innerHTML = count;
+
+      let langue = document.getElementById(tab_lang.find(estLangue).code);
+      langue.innerHTML = tab_lang.find(estLangue).quantité;
+      console.log(tab_lang);
+      
+      socket.send("message received!");
+    });
+  </script>
 </body>
 
 </html>

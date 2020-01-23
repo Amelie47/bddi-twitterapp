@@ -20,7 +20,7 @@ wsServer.on("connection", client => {
 
   twitterStream.on("data", tweet => {
     // chaine de caractere
-    client.send(tweet.text);
+    client.send(JSON.stringify(tweet));
   })
 })
 
