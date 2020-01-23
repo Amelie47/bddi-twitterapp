@@ -1,0 +1,32 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+  <meta charset="utf-8">
+  <title>TwT Streamer</title>
+  <meta name="description" content="">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <script>
+    // Client to server
+    
+    console.log("It works!");
+    const socket = new WebSocket(`ws://${window.location.hostname}:${window.location.port}`);
+
+    socket.addEventListener('open', event => {
+      console.log("connected", event);
+      socket.send("hop");
+    });
+
+    socket.addEventListener('message', event => {
+      console.log("new message", event.data);
+
+      socket.send("message received!");
+    });
+  </script>
+</head>
+
+<body>
+  <p>Hello world!</p>
+</body>
+
+</html>
