@@ -1,6 +1,6 @@
 require("dotenv").config();
 
-// Server to client
+// === Server to client ===
 
 const { wsServer, server } = require("./lib/server");
 const twitterStream = require("./lib/twitter");
@@ -14,6 +14,7 @@ wsServer.on("connection", client => {
 
   client.on("message", message => {
     console.log("message from client: ", message);
+    client.send(message);
   })
 
   client.send("Welcome!");
