@@ -24,9 +24,12 @@
 </style>
 
 
-  <p>Hello world!</p>
+  <h1>Hello world!</h1>
+  <p>Statistiques sur les origines linguistiques des tweets reçus et sur leur nombre de tweets avec hashtags</p>
+  "pause" pour stopper le flux de tweets, "resume" pour le reprendre
   <input type="text" id="input_filter"></input>
-  <button id="btn">Hop</button>
+  <button id="btn">Exécuter la commande</button>
+  <br><br>
   <div>
     Nombre de tweet reçus : <span id="count_container"></span>
   </div>
@@ -164,13 +167,17 @@
 
     // ===> client event
     btn.addEventListener('click',function(){
-        socket.send(input_filter.value);
-    })
+      var msg = {
+        type: "command",
+        text: input_filter.value
+      };
+      socket.send(JSON.stringify(msg));
+    });
 
     // ===> ws event
     socket.addEventListener('open', event => {
       console.log("connected", event);
-      socket.send("hop");
+      //socket.send("Client connected");
     });
   
     socket.addEventListener('message', event => {
